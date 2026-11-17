@@ -1,6 +1,6 @@
 // 오프라인에서도 앱이 열리도록 화면 파일을 보관한다.
-// 인터넷이 되면 새 버전을 받아 두고, 다음에 열 때 반영된다.
-const CACHE = 'naso-v4';
+// 인터넷이 되면 항상 새 버전을 먼저 받고, 안 될 때만 보관본을 쓴다.
+const CACHE = 'naso-v5';
 const FILES = [
   './', 'index.html', 'app.js', 'web-backend.js', 'styles.css', 'glacier.css', 'mac.css', 'web.css',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
@@ -19,10 +19,10 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(
-    caches.open(CACHE).then(async c => {
-      const hit = await c.match(e.request, { ignoreSearch: true });
-      const net = fetch(e.request).then(r => { if (r.ok) c.put(e.request, r.clone()); return r; }).catch(() => hit);
-      return hit || net;
-    })
+    caches.open(CACHE).then(c =>
+      fetch(e.request, { cache: 'no-cache' })
+        .then(r => { if (r.ok) c.put(e.request, r.clone()); return r; })
+        .catch(() => c.match(e.request, { ignoreSearch: true }).then(hit => hit || Response.error()))
+    )
   );
 });
