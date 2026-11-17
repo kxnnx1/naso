@@ -1,0 +1,11 @@
+/* ===== macOS 앱 전용 보정 (.is-app = 데스크톱 앱 안에서 실행 중) =====
+   맥에서는 운영체제의 신호등 버튼(닫기·최소화·확대)과 창 테두리 크기조절을 쓴다.
+   그래서 윈도우판의 자체 창 버튼과 가장자리 크기조절 영역은 숨기고,
+   헤더 왼쪽에 신호등 버튼 자리를 비워 둔다. */
+.is-app .win-controls { display: none !important; }
+.is-app .rz { display: none !important; }
+.is-app #topbar { padding-left: 84px; }
+.is-app .hd-right { padding-right: 18px; }
+.is-app body {
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, 'Malgun Gothic', sans-serif;
+}

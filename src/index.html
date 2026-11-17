@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fbfdfe">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NASO">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<script>document.documentElement.classList.add(window.__TAURI__ ? 'is-app' : 'is-web'); document.documentElement.dataset.theme = 'glacier';</script>
+<title>NASO</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="glacier.css">
+<link rel="stylesheet" href="mac.css">
+<link rel="stylesheet" href="web.css">
+<script>
+window.__APP_ERRORS__ = [];
+window.addEventListener('error', function(e){
+  window.__APP_ERRORS__.push((e.message || '리소스 로드 실패: ' + (e.target && e.target.src || '')) + (e.lineno ? ' (줄 ' + e.lineno + ')' : ''));
+}, true);
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    if (window.__APP_BOOTED__) return;
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#dc2626;color:#fff;padding:10px 14px;font-size:12px;z-index:99999;white-space:pre-wrap;word-break:break-all;font-family:monospace;';
+    var msg;
+    if (!window.__APP_LOADED__) msg = 'app.js가 로드되지 않음 (파일이 없거나 읽기 실패)';
+    else msg = 'app.js는 로드됐지만 초기화 실패';
+    if (window.__APP_ERRORS__.length) msg += '\n상세: ' + window.__APP_ERRORS__.join('\n상세: ');
+    d.textContent = '[진단] ' + msg;
+    document.body.appendChild(d);
+  }, 600);
+});
+</script>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="hd-left">
+      <span id="appName"></span>
+      <div id="modelTabs"></div>
+    </div>
+    <div class="hd-right">
+      <div class="search-box">
+        <span class="search-ic" id="searchIcon"></span>
+        <input class="ed-input" id="searchInput" type="text" autocomplete="off" placeholder="검색">
+        <button class="row-btn search-clear" id="searchClear"></button>
+      </div>
+      <button class="icon-btn" id="galleryBtn"></button>
+      <button class="icon-btn" id="settingsBtn"></button>
+      <div class="win-controls">
+        <button class="win-btn" id="winMin"></button>
+        <button class="win-btn" id="winMax"></button>
+        <button class="win-btn win-close" id="winClose"></button>
+      </div>
+    </div>
+  </header>
+  <div id="toolbar"></div>
+  <main id="content"></main>
+</div>
+<div id="toast"></div>
+<script src="web-backend.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
