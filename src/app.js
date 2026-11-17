@@ -49,7 +49,18 @@ function showFatal(msg) {
   }
   b.textContent = '오류 발생: ' + msg;
 }
-window.addEventListener('error', e => showFatal((e.message || '알 수 없는 오류') + (e.lineno ? ` (줄 ${e.lineno})` : '')));
+// 앱 밖에서 끼어든 스크립트(브라우저 확장, 콘텐츠 차단기, 카톡 같은 앱 내 브라우저 등)의 오류는
+// 브라우저가 내용을 가린 채 "Script error."로만 알려 준다. 앱과 무관하므로 화면에 띄우지 않는다.
+function isForeignError(e) {
+  if (/^Script error\.?$/i.test(e.message || '')) return true;
+  if (!e.message && !e.error) return true;
+  if (e.filename) { try { return new URL(e.filename, location.href).origin !== location.origin; } catch (_) { } }
+  return false;
+}
+window.addEventListener('error', e => {
+  if (isForeignError(e)) { console.warn('외부 스크립트 오류 무시:', e.message, e.filename || ''); return; }
+  showFatal((e.message || '알 수 없는 오류') + (e.lineno ? ` (줄 ${e.lineno})` : ''));
+});
 window.addEventListener('unhandledrejection', e => showFatal(String(e.reason && e.reason.message || e.reason)));
 
 function overlayHost() { return document.getElementById('app') || document.body; }

@@ -20,6 +20,7 @@
 <script>
 window.__APP_ERRORS__ = [];
 window.addEventListener('error', function(e){
+  if (/^Script error\.?$/i.test(e.message || '')) return; // 앱 밖 스크립트의 가려진 오류
   window.__APP_ERRORS__.push((e.message || '리소스 로드 실패: ' + (e.target && e.target.src || '')) + (e.lineno ? ' (줄 ' + e.lineno + ')' : ''));
 }, true);
 window.addEventListener('load', function(){
