@@ -1,6 +1,6 @@
 // 오프라인에서도 앱이 열리도록 화면 파일을 보관한다.
 // 인터넷이 되면 새 버전을 받아 두고, 다음에 열 때 반영된다.
-const CACHE = 'naso-v3';
+const CACHE = 'naso-v4';
 const FILES = [
   './', 'index.html', 'app.js', 'web-backend.js', 'styles.css', 'glacier.css', 'mac.css', 'web.css',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
